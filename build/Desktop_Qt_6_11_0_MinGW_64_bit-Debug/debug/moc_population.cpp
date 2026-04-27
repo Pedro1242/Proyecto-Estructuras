@@ -43,6 +43,12 @@ template <> constexpr inline auto Population::qt_create_metaobjectdata<qt_meta_t
         "",
         "dnaEarned",
         "amount",
+        "dayChanged",
+        "day",
+        "cureUpdated",
+        "progress",
+        "cureCompleted",
+        "playerWon",
         "tick"
     };
 
@@ -53,8 +59,20 @@ template <> constexpr inline auto Population::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SignalData<void(int)>(3, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::Int, 4 },
         }}),
+        // Signal 'dayChanged'
+        QtMocHelpers::SignalData<void(int)>(5, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 6 },
+        }}),
+        // Signal 'cureUpdated'
+        QtMocHelpers::SignalData<void(float)>(7, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Float, 8 },
+        }}),
+        // Signal 'cureCompleted'
+        QtMocHelpers::SignalData<void()>(9, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'playerWon'
+        QtMocHelpers::SignalData<void()>(10, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'tick'
-        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -80,7 +98,11 @@ void Population::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->populationUpdated(); break;
         case 1: _t->dnaEarned((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
-        case 2: _t->tick(); break;
+        case 2: _t->dayChanged((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
+        case 3: _t->cureUpdated((*reinterpret_cast<std::add_pointer_t<float>>(_a[1]))); break;
+        case 4: _t->cureCompleted(); break;
+        case 5: _t->playerWon(); break;
+        case 6: _t->tick(); break;
         default: ;
         }
     }
@@ -88,6 +110,14 @@ void Population::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         if (QtMocHelpers::indexOfMethod<void (Population::*)()>(_a, &Population::populationUpdated, 0))
             return;
         if (QtMocHelpers::indexOfMethod<void (Population::*)(int )>(_a, &Population::dnaEarned, 1))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (Population::*)(int )>(_a, &Population::dayChanged, 2))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (Population::*)(float )>(_a, &Population::cureUpdated, 3))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (Population::*)()>(_a, &Population::cureCompleted, 4))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (Population::*)()>(_a, &Population::playerWon, 5))
             return;
     }
 }
@@ -111,14 +141,14 @@ int Population::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 7;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 7)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 7;
     }
     return _id;
 }
@@ -133,5 +163,29 @@ void Population::populationUpdated()
 void Population::dnaEarned(int _t1)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 1, nullptr, _t1);
+}
+
+// SIGNAL 2
+void Population::dayChanged(int _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 2, nullptr, _t1);
+}
+
+// SIGNAL 3
+void Population::cureUpdated(float _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 3, nullptr, _t1);
+}
+
+// SIGNAL 4
+void Population::cureCompleted()
+{
+    QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
+}
+
+// SIGNAL 5
+void Population::playerWon()
+{
+    QMetaObject::activate(this, &staticMetaObject, 5, nullptr);
 }
 QT_WARNING_POP

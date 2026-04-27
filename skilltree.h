@@ -2,20 +2,19 @@
 #include "skillnode.h"
 #include <QList>
 
-// Estadísticas globales de la bacteria
 struct BacteriaStats {
-    float infectivity = 25.0f;  // base
-    float severity    = 10.0f;
-    float lethality   = 5.0f;
-    float stealth     = 80.0f;  // 100 = invisible, 0 = muy detectada
+    float infectivity =  5.0f;  // base muy bajo - crece con habilidades
+    float severity    =  2.0f;
+    float lethality   =  1.0f;
+    float stealth     = 15.0f;  // 0=detectable, 100=invisible
 };
 
 class SkillTree {
 public:
     SkillNode*    root;
     int           dnaPoints;
-    BacteriaStats baseStats;   // stats fijas base
-    BacteriaStats stats;       // stats calculadas con bonuses
+    BacteriaStats baseStats;
+    BacteriaStats stats;
 
     SkillTree();
     ~SkillTree();
@@ -23,7 +22,7 @@ public:
     bool addChild(SkillNode* parent, SkillNode* child);
     bool unlock(SkillNode* node);
     void clear(SkillNode* node);
-    void recalcStats();   // ✅ recalcula stats sumando efectos desbloqueados
+    void recalcStats();
 
     void preOrder(SkillNode* node, QList<SkillNode*>& result);
     void inOrder(SkillNode* node, QList<SkillNode*>& result);

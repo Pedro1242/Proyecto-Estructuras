@@ -1,15 +1,16 @@
 #pragma once
 #include <QMainWindow>
-#include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QListWidget>
 #include <QLabel>
 #include <QPushButton>
 #include <QProgressBar>
 #include <QMap>
+#include <QWheelEvent>
+#include <QTimer>
 #include "skilltree.h"
-#include "population.h"        // ✅
-#include "backgroundscene.h"   // ✅
+#include "population.h"
+#include "backgroundscene.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -21,25 +22,49 @@ public slots:
     void onNodeClicked(SkillNode* node);
     void onAddDna();
     void onReset();
-    void onPopulationUpdated();   // ✅
-    void onDnaEarned(int amount); // ✅
+    void onPopulationUpdated();
+    void onDnaEarned(int amount);
+
+    // tooltip persistente para nodos
+    void showNodeTooltip(SkillNode* node, const QPoint& globalPos);
+    void hideNodeTooltip();
+
+    // barra de cura
+    void onCureUpdated(float progress);
+    void onCureCompleted();
+    void onPlayerWon();
 
 private slots:
     void onPreOrder();
     void onInOrder();
     void onPostOrder();
     void onBFS();
+    void onDayChanged(int day);
+    void tickNews();
 
 private:
+
     SkillTree*       tree;
-    Population*      population;       // ✅
-    BackgroundScene* scene;            // ✅ cambia de QGraphicsScene a BackgroundScene
+    Population*      population;
+    BackgroundScene* scene;
     QGraphicsView*   view;
     QListWidget*     traversalList;
     QLabel*          dnaLabel;
     QLabel*          statsLabel;
 
-    // Barras de stats bacteria
+    // tooltip de nodo
+    QLabel*          nodeTooltip;
+
+    // contador de dias
+    QLabel*          lblDay;
+
+    // ticker de noticias
+    QLabel*          lblNewsTicker;
+    QTimer*          newsTimer;
+    QString          currentNews;
+    QString          pendingNews;
+    int              newsScrollPos;
+
     QProgressBar* barInfectivity;
     QProgressBar* barSeverity;
     QProgressBar* barLethality;
@@ -49,11 +74,15 @@ private:
     QLabel*       lblLetVal;
     QLabel*       lblStlVal;
 
-    // ✅ Labels de población
-    QLabel* lblPopHealthy;
-    QLabel* lblPopInfected;
-    QLabel* lblPopDead;
+    QLabel*       lblPopHealthy;
+    QLabel*       lblPopInfected;
+    QLabel*       lblPopDead;
     QProgressBar* barInfectedPop;
+
+    // barra de cura
+    QLabel*       lblCureTitle;
+    QProgressBar* barCure;
+    QLabel*       lblCureVal;
 
     QMap<SkillNode*, QPointF> nodePositions;
 
@@ -64,6 +93,7 @@ private:
     void showTraversal(QList<SkillNode*>& nodes, const QString& title);
     void updateDnaLabel();
     void updateStatsPanel();
-    // en mainwindow.h — dentro de private:
     void wheelEvent(QWheelEvent* event) override;
+
+    QString pickNews(int day);
 };

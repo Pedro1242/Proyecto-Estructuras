@@ -49,10 +49,21 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "onPopulationUpdated",
         "onDnaEarned",
         "amount",
+        "showNodeTooltip",
+        "QPoint",
+        "globalPos",
+        "hideNodeTooltip",
+        "onCureUpdated",
+        "progress",
+        "onCureCompleted",
+        "onPlayerWon",
         "onPreOrder",
         "onInOrder",
         "onPostOrder",
-        "onBFS"
+        "onBFS",
+        "onDayChanged",
+        "day",
+        "tickNews"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -70,14 +81,34 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SlotData<void(int)>(8, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::Int, 9 },
         }}),
+        // Slot 'showNodeTooltip'
+        QtMocHelpers::SlotData<void(SkillNode *, const QPoint &)>(10, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 3, 4 }, { 0x80000000 | 11, 12 },
+        }}),
+        // Slot 'hideNodeTooltip'
+        QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'onCureUpdated'
+        QtMocHelpers::SlotData<void(float)>(14, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Float, 15 },
+        }}),
+        // Slot 'onCureCompleted'
+        QtMocHelpers::SlotData<void()>(16, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'onPlayerWon'
+        QtMocHelpers::SlotData<void()>(17, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'onPreOrder'
-        QtMocHelpers::SlotData<void()>(10, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(18, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onInOrder'
-        QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(19, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onPostOrder'
-        QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(20, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onBFS'
-        QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(21, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onDayChanged'
+        QtMocHelpers::SlotData<void(int)>(22, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 23 },
+        }}),
+        // Slot 'tickNews'
+        QtMocHelpers::SlotData<void()>(24, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -106,10 +137,17 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 2: _t->onReset(); break;
         case 3: _t->onPopulationUpdated(); break;
         case 4: _t->onDnaEarned((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
-        case 5: _t->onPreOrder(); break;
-        case 6: _t->onInOrder(); break;
-        case 7: _t->onPostOrder(); break;
-        case 8: _t->onBFS(); break;
+        case 5: _t->showNodeTooltip((*reinterpret_cast<std::add_pointer_t<SkillNode*>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QPoint>>(_a[2]))); break;
+        case 6: _t->hideNodeTooltip(); break;
+        case 7: _t->onCureUpdated((*reinterpret_cast<std::add_pointer_t<float>>(_a[1]))); break;
+        case 8: _t->onCureCompleted(); break;
+        case 9: _t->onPlayerWon(); break;
+        case 10: _t->onPreOrder(); break;
+        case 11: _t->onInOrder(); break;
+        case 12: _t->onPostOrder(); break;
+        case 13: _t->onBFS(); break;
+        case 14: _t->onDayChanged((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
+        case 15: _t->tickNews(); break;
         default: ;
         }
     }
@@ -134,14 +172,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 16)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 16;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 16)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 9;
+        _id -= 16;
     }
     return _id;
 }

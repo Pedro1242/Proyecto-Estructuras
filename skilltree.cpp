@@ -2,45 +2,66 @@
 #include <QQueue>
 
 SkillTree::SkillTree() : dnaPoints(20) {
-    root = new SkillNode("bacteria", "Bacteria", "Patógeno base", 0, nullptr,
+    root = new SkillNode("bacteria", "Bacteria", "Pathogen base", 0, nullptr,
                          NodeEffect(0, 0, 0, 0));
     root->unlocked = true;
 
-    // Rama 1: Transmisión — mejora infectividad
-    auto* trans = new SkillNode("trans", "Transmisión", "Mejora de propagación", 2, root,
-                                NodeEffect(10, 0, 0, -5));
-    auto* aire  = new SkillNode("aire", "Vía Aérea", "+15% infección aérea", 3, trans,
-                               NodeEffect(15, 0, 0, -8));
-    auto* agua  = new SkillNode("agua", "Vía Acuática", "+10% infección acuática", 3, trans,
-                               NodeEffect(10, 0, 0, -5));
-    auto* pluma = new SkillNode("pluma", "Zoonosis", "+20% en aves, +5% lethal", 4, aire,
-                                NodeEffect(20, 5, 5, -10));
-    addChild(root, trans); addChild(trans, aire);
-    addChild(trans, agua); addChild(aire, pluma);
+    // --- Rama 1: Transmision (3 hijos) ---
+    auto* trans  = new SkillNode("trans",   "Transmision",   "Improves spread",          2, root,  NodeEffect(8,  0,  0,  0));
+    auto* aire   = new SkillNode("aire",    "Via Aerea",     "+12% air infection",        3, trans, NodeEffect(12, 0,  0, -3));
+    auto* agua   = new SkillNode("agua",    "Via Acuatica",  "+8% water infection",       3, trans, NodeEffect(8,  0,  0, -2));
+    auto* vector = new SkillNode("vector",  "Vectores",      "Insects and rodents",       3, trans, NodeEffect(6,  2,  0, -2));
 
-    // Rama 2: Síntomas — mejora severidad y letalidad
-    auto* symp   = new SkillNode("symp", "Síntomas", "Activa síntomas visibles", 2, root,
-                               NodeEffect(0, 10, 5, -15));
-    auto* fiebre = new SkillNode("fiebre", "Fiebre", "+10% severidad", 3, symp,
-                                 NodeEffect(5, 10, 3, -10));
-    auto* tos    = new SkillNode("tos", "Tos", "+8% infección por tos", 3, fiebre,
-                              NodeEffect(8, 5, 2, -12));
-    auto* hemor  = new SkillNode("hemor", "Hemorragia", "+25% letalidad", 5, fiebre,
-                                NodeEffect(0, 15, 25, -20));
-    addChild(root, symp); addChild(symp, fiebre);
-    addChild(fiebre, tos); addChild(fiebre, hemor);
+    auto* aerosol = new SkillNode("aerosol", "Aerosol",      "+10% aerosol spread",       4, aire,   NodeEffect(10, 0,  0, -4));
+    auto* viento  = new SkillNode("viento",  "Viento",       "+8% wind spread",           4, aire,   NodeEffect(8,  0,  0, -3));
+    auto* lluvia  = new SkillNode("lluvia",  "Lluvia Acida", "+6% rain spread",           4, agua,   NodeEffect(6,  3,  0, -3));
+    auto* insect  = new SkillNode("insect",  "Insectos",     "+7% insect spread",         4, vector, NodeEffect(7,  1,  0, -2));
+    auto* roed    = new SkillNode("roed",    "Roedores",     "+5% rodent spread",         4, vector, NodeEffect(5,  2,  1, -2));
 
-    // Rama 3: Habilidades — mejora sigilo y resistencia
-    auto* abil  = new SkillNode("abil", "Habilidades", "Mejoras adaptativas", 2, root,
-                               NodeEffect(0, 0, 0, 15));
-    auto* drug1 = new SkillNode("drug1", "Drug Resist. I", "+20% resist. fármacos", 4, abil,
-                                NodeEffect(5, 0, 5, 10));
-    auto* drug2 = new SkillNode("drug2", "Drug Resist. II", "+40% resist. fármacos", 6, drug1,
-                                NodeEffect(10, 0, 10, 15));
-    auto* camuf = new SkillNode("camuf", "Camuflaje", "Reduce detección", 5, abil,
-                                NodeEffect(0, 0, 0, 30));
-    addChild(root, abil); addChild(abil, drug1);
-    addChild(drug1, drug2); addChild(abil, camuf);
+    // height 4: pandemia is child of aerosol
+    auto* pandemia = new SkillNode("pandemia", "Pandemia",   "+20% global spread",        5, aerosol, NodeEffect(20, 5,  2, -8));
+
+    addChild(root,    trans);
+    addChild(trans,   aire);   addChild(trans,  agua);   addChild(trans,  vector);
+    addChild(aire,    aerosol); addChild(aire,  viento);
+    addChild(agua,    lluvia);
+    addChild(vector,  insect);  addChild(vector, roed);
+    addChild(aerosol, pandemia);
+
+    // --- Rama 2: Sintomas (3 hijos) ---
+    auto* symp    = new SkillNode("symp",    "Sintomas",     "Activates visible symptoms", 2, root,   NodeEffect(0,  8,  3, -5));
+    auto* fiebre  = new SkillNode("fiebre",  "Fiebre",       "+10% severity",              3, symp,   NodeEffect(3, 10,  2, -5));
+    auto* fatiga  = new SkillNode("fatiga",  "Fatiga",       "+8% severity",               3, symp,   NodeEffect(0,  8,  1, -3));
+    auto* necrosis= new SkillNode("necrosis","Necrosis",     "+15% lethality",             4, symp,   NodeEffect(0, 12, 15, -8));
+
+    auto* tos     = new SkillNode("tos",     "Tos",          "+8% infection via cough",    4, fiebre, NodeEffect(8,  4,  1, -6));
+    auto* vomitos = new SkillNode("vomitos", "Vomitos",      "+5% severity",               4, fiebre, NodeEffect(2,  5,  2, -4));
+    auto* paralisis=new SkillNode("par",     "Paralisis",    "+10% lethality",             4, fatiga, NodeEffect(0,  5, 10, -5));
+
+    auto* hemor   = new SkillNode("hemor",   "Hemorragia",   "+25% lethality",             5, tos,    NodeEffect(0, 15, 25,-10));
+
+    addChild(root,   symp);
+    addChild(symp,   fiebre); addChild(symp,  fatiga); addChild(symp, necrosis);
+    addChild(fiebre, tos);    addChild(fiebre, vomitos);
+    addChild(fatiga, paralisis);
+    addChild(tos,    hemor);
+
+    // --- Rama 3: Habilidades (2 hijos - rama asimetrica) ---
+    auto* abil   = new SkillNode("abil",   "Habilidades",    "Adaptive resistances",       2, root,   NodeEffect(0,  0,  0, 10));
+    auto* drug1  = new SkillNode("drug1",  "Drug Resist. I", "+15% drug resistance",       4, abil,   NodeEffect(3,  0,  4,  8));
+    auto* camuf  = new SkillNode("camuf",  "Camuflaje",      "Reduces detection",          5, abil,   NodeEffect(0,  0,  0, 20));
+
+    auto* drug2  = new SkillNode("drug2",  "Drug Resist. II","+25% drug resistance",       6, drug1,  NodeEffect(6,  0,  8, 10));
+    auto* mutac  = new SkillNode("mutac",  "Mutacion",       "+10% all stats",             5, drug1,  NodeEffect(5,  5,  5,  5));
+
+    auto* inmun  = new SkillNode("inmun",  "Inmunidad",      "Immune to all drugs",        7, drug2,  NodeEffect(10, 5, 10, 15));
+    auto* sigext = new SkillNode("sigext", "Sigilo Ext.",    "+30% stealth",               5, camuf,  NodeEffect(0,  0,  0, 30));
+
+    addChild(root,  abil);
+    addChild(abil,  drug1);  addChild(abil,  camuf);
+    addChild(drug1, drug2);  addChild(drug1, mutac);
+    addChild(drug2, inmun);
+    addChild(camuf, sigext);
 
     recalcStats();
 }
@@ -69,7 +90,7 @@ bool SkillTree::unlock(SkillNode* node) {
     if (dnaPoints < node->dnaCost) return false;
     dnaPoints -= node->dnaCost;
     node->unlocked = true;
-    recalcStats(); // ✅ recalcula stats inmediatamente al desbloquear
+    recalcStats();
     return true;
 }
 
