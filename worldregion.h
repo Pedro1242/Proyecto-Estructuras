@@ -1,0 +1,4 @@
+#ifndef WORLDREGION_H
+#define WORLDREGION_H
+
+#endif // WORLDREGION_H

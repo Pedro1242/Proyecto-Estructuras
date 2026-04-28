@@ -1,0 +1,4 @@
+#ifndef WORLDMAPWIDGET_H
+#define WORLDMAPWIDGET_H
+
+#endif // WORLDMAPWIDGET_H
